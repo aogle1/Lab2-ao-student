@@ -1,5 +1,7 @@
 package edu.luc.cs.cs271.lab2;
 
+import java.util.Arrays;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,8 +10,8 @@ public class Search {
   /** Looks for the position of the named team in an array. */
   public static Optional<Integer> findTeamPosition(final Team[] arr, final String key) {
     // Gets the array size
-    final int size = arr.length;
     // Runs through a for loop to check
+    final int size = arr.length;
     for (int i = 0; i < size; i++) {
       // Gets the current item at index and compare name to key
       if (arr[i].getName().equals(key)) {
@@ -23,6 +25,15 @@ public class Search {
 
   /** Looks for the position of the named team in a list. */
   public static Optional<Integer> findTeamPosition(final List<Team> list, final String key) {
+    final int size = list.size();
+
+    for (int i = 0; i < size; i++) {
+      // Gets the current item at index and compare name to key
+      if (list.get(i).getName().equals(key)) {
+        // Return the index of where the item with key is located
+        return Optional.of(i);
+      }
+    }
     // TODO complete this method
     return Optional.empty();
   }
@@ -33,7 +44,7 @@ public class Search {
    * @pre arr is sorted
    * @post arr[result].funding >= minFunding && for all 0 <= i < result : arr[i].funding < minFunding
    */
-  public static Optional<Integer> findTeamMinFunding(final Team[] arr, final int minFunding) {
+  public static Optional<Integer> findTeamMinFunding(final Team[] arr[], final int minFunding) {
     // TODO complete this method
     return Optional.empty();
   }
@@ -48,6 +59,7 @@ public class Search {
    * @post arr[result].funding >= minFunding && for all 0 <= i < result : arr[i].funding < minFunding
    */
   public static Optional<Integer> findTeamMinFundingFast(final Team[] arr, final int minFunding) {
+
     // TODO complete this method
     // Gets the array size
     final int size = arr.length;
@@ -56,11 +68,23 @@ public class Search {
     int high = size - 1;
     // Keep going as long as there is more than one item to be checked
     // Eliminate the wrong half of the array
-    // Return current item only if it meets the condition!
-    if (low <= high && arr[low].getFunding() >= minFunding) {
-      return Optional.of(low);
-    } else {
-      return Optional.empty();
-    }
+    // Return current item only if it meets the condition
+     while(low <= high) {
+         int mid = (low + high)/2;
+         int midFunding = arr[mid].getFunding();
+         if (midFunding <                                                                                                                                                                                        minFunding) {
+             low = mid + 1;
+         } else if (midFunding > minFunding) {
+             high = mid - 1;
+         } else { //found the smallest possible element that is equal to our variable minFunding
+             return Optional.of(midFunding);
+         }
+     }
+     return Optional.empty();
+   // if (low <= high && arr[low].getFunding() >= minFunding) {
+      //return Optional.of(low);
+    //} else {
+      //return Optional.empty();
+   //}
   }
 }
